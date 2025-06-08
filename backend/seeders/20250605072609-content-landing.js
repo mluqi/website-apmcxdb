@@ -1,0 +1,218 @@
+"use strict";
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert("LandingContent", [
+      // HERO SECTION
+      {
+        section: "hero",
+        key_name: "image_hero",
+        value: "uploads/landingpage/hero-default.png", // ganti sesuai file di public
+        type: "image",
+        sort_order: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "text_hero",
+        value: "Internet <span class='text-secondary'>Super Stabil</span> untuk Performa Tanpa Kompromi",
+        type: "text",
+        sort_order: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "subtext_hero",
+        value: "Solusi konektivitas kelas enterprise dengan jaminan kualitas untuk kebutuhan bisnis dan rumah premium.",
+        type: "text",
+        sort_order: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "cta_text",
+        value: "Daftar Sekarang",
+        type: "text",
+        sort_order: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "cta_link",
+        value: "/daftar",
+        type: "text",
+        sort_order: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "cta2_text",
+        value: "Konsultasi Gratis",
+        type: "text",
+        sort_order: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "hero",
+        key_name: "cta2_link",
+        value: "/konsultasi",
+        type: "text",
+        sort_order: 7,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
+      // FEATURE SECTION (hanya tulisan)
+      {
+        section: "feature",
+        key_name: "title_1",
+        value: "Stabil Latency",
+        type: "text",
+        sort_order: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "desc_1",
+        value: "Jelajahi internet tanpa khawatir dengan penggunaan data Bebas FUP dan Jaringan 100% Fiber Optic.",
+        type: "text",
+        sort_order: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "icon_1",
+        value: "DashboardIcon", // nama icon, frontend mapping ke komponen
+        type: "text",
+        sort_order: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
+      {
+        section: "feature",
+        key_name: "title_2",
+        value: "99.5% SLA",
+        type: "text",
+        sort_order: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "desc_2",
+        value: "Layanan internet Dedicated kita memberikan kecepatan SLA 99,5% / Service Level Agreement.",
+        type: "text",
+        sort_order: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "icon_2",
+        value: "ReloadIcon",
+        type: "text",
+        sort_order: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
+      {
+        section: "feature",
+        key_name: "title_3",
+        value: "24/7 Service",
+        type: "text",
+        sort_order: 7,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "desc_3",
+        value: "Customer Support 7 x 24 Jam dengan layanan terbaik untuk anda.",
+        type: "text",
+        sort_order: 8,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "feature",
+        key_name: "icon_3",
+        value: "ClockIcon",
+        type: "text",
+        sort_order: 9,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
+      // PARTNER SECTION (hanya logo partner)
+      {
+        section: "partner",
+        key_name: "logo_1",
+        value: "uploads/landingpage/partner1.png",
+        type: "image",
+        sort_order: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "partner",
+        key_name: "logo_2",
+        value: "uploads/landingpage/partner2.png",
+        type: "image",
+        sort_order: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "partner",
+        key_name: "logo_3",
+        value: "uploads/landingpage/partner3.png",
+        type: "image",
+        sort_order: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "partner",
+        key_name: "logo_4",
+        value: "uploads/landingpage/partner4.png",
+        type: "image",
+        sort_order: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "partner",
+        key_name: "logo_5",
+        value: "uploads/landingpage/partner5.png",
+        type: "image",
+        sort_order: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        section: "partner",
+        key_name: "logo_6",
+        value: "uploads/landingpage/partner6.png",
+        type: "image",
+        sort_order: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("LandingContent", null, {});
+  },
+};
