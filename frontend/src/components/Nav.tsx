@@ -1,57 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { NavigationLinks } from "../config/links";
+import { useLocation } from "react-router-dom";
 
 const Nav = () => {
-  const [currentPathname, setCurrentPathname] = useState<string>("");
-  const [activeLink, setActiveLink] = useState<string>("");
+  const location = useLocation();
+  const currentPathname = location.pathname;
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    setCurrentPathname(window.location.pathname);
-
-    const handleLocationChange = () => {
-      setCurrentPathname(window.location.pathname);
-    };
-
-    window.addEventListener("popstate", handleLocationChange);
-
-    const handleScroll = () => {
-      NavigationLinks.forEach((link) => {
-        if (link.path.startsWith("#") && link.path.length > 1) {
-          const targetElement = document.querySelector(link.path);
-          if (targetElement) {
-            const rect = targetElement.getBoundingClientRect();
-            const navbarHeight =
-              document.getElementById("navbar")?.offsetHeight || 0;
-            if (
-              rect.top <= navbarHeight + 10 &&
-              rect.bottom > navbarHeight + 10
-            ) {
-              setActiveLink(link.path);
-            }
-          }
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("popstate", handleLocationChange);
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -107,8 +62,10 @@ const Nav = () => {
             className={`
               uppercase text-accent transition-all flex items-center
               ${
-                (link.path.startsWith("#") && activeLink === link.path) ||
-                (!link.path.startsWith("#") && currentPathname === link.path)
+                (!link.path.startsWith("#") && currentPathname === link.path) ||
+                (!link.path.startsWith("#") &&
+                  currentPathname.startsWith(link.path) &&
+                  link.path !== "/")
                   ? "font-bold border-b-2 border-accent"
                   : "font-bold text-textcolor hover:text-accent"
               }

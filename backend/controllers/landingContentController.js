@@ -30,7 +30,7 @@ exports.updateLandingContent = async (req, res) => {
         }
         landingContent.value = path.join(
           "uploads",
-          "landingcontent",
+          "landingpage",
           req.file.filename
         );
       }

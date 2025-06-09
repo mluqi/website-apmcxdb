@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useKontak } from "@/contexts/KontakContext";
 
 const ContactSection: React.FC = () => {
+  const { kontak } = useKontak();
+  const email = kontak?.email || "";
+  const telepon = kontak?.telepon || "";
+  const alamat = kontak?.alamat || "";
+  if (!kontak) {
+    return null;
+  }
+
   return (
     <section className="py-16 md:py-44 bg-gradient-to-b from-white to-secondary/10">
       <div className="container mx-auto px-4 text-center">
@@ -14,24 +23,15 @@ const ContactSection: React.FC = () => {
         </div>
         <p className="text-lg text-gray-600 mb-2">
           Email:{" "}
-          <a
-            href="mailto:kontak@example.com"
-            className="text-accent hover:text-secondary"
-          >
-            kontak@example.com
-          </a>
+          <a className="text-accent hover:text-secondary">{email || ""}</a>
         </p>
         <p className="text-lg text-gray-600 mb-2">
           Telepon:{" "}
-          <a
-            href="tel:081234567890"
-            className="text-accent hover:text-secondary"
-          >
-            0812-3456-7890
-          </a>
+          <a className="text-accent hover:text-secondary">{telepon || ""}</a>
         </p>
         <p className="text-lg text-gray-600">
-          Alamat: Jl. Contoh No. 123, Jakarta
+          Alamat:{" "}
+          <a className="text-accent hover:text-secondary">{alamat || ""}</a>
         </p>
         <div className="mt-8">
           <Link

@@ -1,52 +1,35 @@
 import { LightningBoltIcon } from "@radix-ui/react-icons";
+import { usePublic } from "@/contexts/PublicContext";
 
-// const RocketIllustration = () => (
-//   <svg viewBox="0 0 300 300" className="w-full h-auto">
-//     {/* Body */}
-//     <g transform="translate(-40 -80) rotate(-45) scale(2,-2)">
-//       {/* Main rocket body */}
-//       <path
-//         d="M0,-100 L20,-120 L20,-180 L-20,-180 L-20,-120 Z"
-//         fill="#3B82F6"
-//       />
-//       <path
-//         d="M-20,-120 L-15,-125 L-15,-175 L15,-175 L15,-125 L20,-120 Z"
-//         fill="#2563EB"
-//       />
-
-//       {/* Rocket window */}
-//       <circle cx="0" cy="-150" r="8" fill="#BFDBFE" />
-//       <circle cx="0" cy="-150" r="5" fill="#EFF6FF" />
-
-//       <path d="M20,-160 L40,-180 L40,-160 L20,-140 Z" fill="#1D4ED8" />
-//       <path d="M-20,-160 L-40,-180 L-40,-160 L-20,-140 Z" fill="#1D4ED8" />
-
-//       {/* Rocket flame */}
-//       <g className="animate-pulse">
-//         <path d="M-15,-180 L0,-220 L15,-180 Z" fill="#F97316" />
-//         <path d="M-10,-180 L0,-200 L10,-180 Z" fill="#F59E0B" />
-//       </g>
-//     </g>
-
-//     {/* Speed lines */}
-//     <g
-//       stroke="#93C5FD"
-//       strokeWidth="1"
-//       strokeDasharray="6 3"
-//       opacity="0.2"
-//       transform="translate(130, 55)"
-//       className="animate-pulse"
-//     >
-//       <line x1="50" y1="50" x2="150" y2="150" />
-//       <line x1="100" y1="80" x2="180" y2="160" />
-//       <line x1="30" y1="120" x2="100" y2="190" />
-//     </g>
-//   </svg>
-// );
+const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
 
 const Hero = () => {
+  const { landingContent } = usePublic();
+  const heroContent = landingContent.filter((item) => item.section === "hero");
+  const heroImage = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "image_hero"
+  )?.value;
+  const HeroTitle = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "text_hero"
+  )?.value;
+  const HeroSubtitle = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "subtext_hero"
+  )?.value;
+  const HeroButton = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "cta_text"
+  )?.value;
+  const HeroButtonLink = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "cta_link"
+  )?.value;
+  const HeroButton2 = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "cta2_text"
+  )?.value;
+  const HeroButton2Link = heroContent.find(
+    (item) => item.section === "hero" && item.key_name === "cta2_link"
+  )?.value;
+
   return (
-    <div className="relative bg-gradient-to-b from-white to-secondary/10 pt-32 pb-2 md:pt-56 md:pb-28">
+    <div className="relative bg-gradient-to-b from-white to-secondary/10 pt-32 pb-4 md:pt-62 md:pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left Column - Content */}
@@ -56,22 +39,38 @@ const Hero = () => {
               Internet Dedicated Premium
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-              Internet <span className="text-secondary">Super Stabil</span>{" "}
-              untuk Performa Tanpa Kompromi
-            </h1>
+            <h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+              dangerouslySetInnerHTML={{
+                __html: HeroTitle || "",
+              }}
+            />
 
-            <p className="text-lg text-gray-600 max-w-lg">
-              Solusi konektivitas kelas enterprise dengan jaminan kualitas untuk
-              kebutuhan bisnis dan rumah premium.
-            </p>
+            <p
+              className="text-lg text-gray-600 max-w-lg"
+              dangerouslySetInnerHTML={{ __html: HeroSubtitle || "" }}
+            />
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-accent text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm hover:bg-secondary hover-scale-105">
-                Daftar Sekarang
+              <button
+                onClick={() => {
+                  if (HeroButtonLink) {
+                    window.location.href = HeroButtonLink;
+                  }
+                }}
+                className="bg-accent text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm hover:bg-secondary hover-scale-105"
+              >
+                {HeroButton}
               </button>
-              <button className="bg-white hover:bg-secondary hover-scale-105 hover:text-white text-gray-800 font-medium py-3 px-8 border border-gray-300 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm">
-                Konsultasi Gratis
+              <button
+                onClick={() => {
+                  if (HeroButton2Link) {
+                    window.location.href = HeroButton2Link;
+                  }
+                }}
+                className="bg-white hover:bg-secondary hover-scale-105 hover:text-white text-gray-800 font-medium py-3 px-8 border border-gray-300 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm"
+              >
+                {HeroButton2}
               </button>
             </div>
           </div>
@@ -79,9 +78,8 @@ const Hero = () => {
           {/* Right Column - Image */}
           <div className="relative h-full max-h-[300px] md:min-h-[400px] flex items-center justify-center z-10 order-2 md:order-1 md:mt-32">
             <div className="relative w-full h-full max-w-md mx-auto">
-              {/* <RocketIllustration /> */}
               <img
-                src="/assets/hero.png"
+                src={`${BASE_IMAGE_URL}${heroImage}`}
                 alt="Ilustrasi Layanan Internet Cepat"
                 className="w-full h-auto object-contain max-h-[150px] md:max-h-[450px]"
                 loading="lazy"

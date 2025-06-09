@@ -86,6 +86,7 @@ const LayananHotspotPage: React.FC = () => {
           center={mapCenter as [number, number]}
           zoom={13}
           className="h-96 rounded-lg shadow-lg"
+          style={{ zIndex: 0 }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

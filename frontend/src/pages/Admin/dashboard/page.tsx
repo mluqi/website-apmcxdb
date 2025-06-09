@@ -3,7 +3,7 @@ import { usePublic } from "../../../contexts/PublicContext";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
-const BASE_IMAGE_URL = "http://localhost:8000/storage/";
+const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
 
 const EditLandingPage = () => {
   const { landingContent, loading, updateLandingContent } = usePublic();
@@ -83,7 +83,17 @@ const EditLandingPage = () => {
     data.append("type", item.type);
     data.append("sort_order", String(item.sort_order));
     if (item.type === "image" && form[item.id]?.file) {
-      data.append("image", form[item.id].file); 
+      data.append("image", form[item.id].file);
+    } else if (
+      item.section === "layanan" &&
+      item.key_name.startsWith("benefit")
+    ) {
+      const arr = form[item.id]?.value
+        ? Array.isArray(form[item.id].value)
+          ? form[item.id].value
+          : JSON.parse(form[item.id].value || "[]")
+        : [];
+      data.append("value", JSON.stringify(arr));
     } else {
       data.append("value", form[item.id]?.value ?? "");
     }
@@ -103,153 +113,234 @@ const EditLandingPage = () => {
         <div>Loading...</div>
       ) : (
         <div className="space-y-8">
-          {["hero", "feature", "partner", "footer"].map((section) => (
-            <div key={section}>
-              <h2 className="text-xl font-semibold mb-2 capitalize">
-                {section}
-              </h2>
-              <div className="space-y-4">
-                {landingContent
-                  .filter((item) => item.section === section)
-                  .sort((a, b) => a.sort_order - b.sort_order)
-                  .map((item) => (
-                    <div
-                      key={item.id}
-                      className="border rounded p-4 flex flex-col md:flex-row md:items-center gap-4"
-                    >
-                      <div className="w-40 font-mono text-xs text-gray-500">
-                        <div>
-                          <span className="font-bold">{item.key_name}</span>
+          {["hero", "feature", "partner", "layanan", "footer"].map(
+            (section) => (
+              <div key={section}>
+                <h2 className="text-xl font-semibold mb-2 capitalize">
+                  {section}
+                </h2>
+                <div className="space-y-4">
+                  {landingContent
+                    .filter((item) => item.section === section)
+                    .sort((a, b) => a.sort_order - b.sort_order)
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        className="border rounded p-4 flex flex-col md:flex-row md:items-center gap-4"
+                      >
+                        <div className="w-40 font-mono text-xs text-gray-500">
+                          <div>
+                            <span className="font-bold">{item.key_name}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">{item.type}</span>
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-gray-400">{item.type}</span>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        {editingId === item.id ? (
-                          item.type === "image" ? (
-                            <>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFile(item.id, e)}
-                              />
-                              {imagePreview[item.id] && (
-                                <img
-                                  src={imagePreview[item.id]!}
-                                  alt="Preview"
-                                  className="mt-2 rounded max-h-32 object-contain border"
+                        <div className="flex-1">
+                          {editingId === item.id ? (
+                            item.type === "image" ? (
+                              <>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handleFile(item.id, e)}
                                 />
-                              )}
+                                {imagePreview[item.id] && (
+                                  <img
+                                    src={imagePreview[item.id]!}
+                                    alt="Preview"
+                                    className="mt-2 rounded max-h-32 object-contain border"
+                                  />
+                                )}
+                              </>
+                            ) : item.key_name === "benefit_1" ||
+                              item.key_name === "benefit_2" ||
+                              (item.key_name === "benefit_3" &&
+                                item.section === "layanan") ? (
+                              <>
+                                {(form[item.id]?.value
+                                  ? Array.isArray(form[item.id].value)
+                                    ? form[item.id].value
+                                    : JSON.parse(form[item.id].value || "[]")
+                                  : [""]
+                                ).map(
+                                  (
+                                    benefit: string,
+                                    idx: number,
+                                    arr: string[]
+                                  ) => (
+                                    <div key={idx} className="flex gap-2 mb-2">
+                                      <input
+                                        type="text"
+                                        value={benefit}
+                                        onChange={(e) => {
+                                          const newArr = [...arr];
+                                          newArr[idx] = e.target.value;
+                                          setForm({
+                                            ...form,
+                                            [item.id]: {
+                                              ...form[item.id],
+                                              value: newArr,
+                                            },
+                                          });
+                                        }}
+                                        className="w-full border rounded px-2 py-1"
+                                        placeholder={`Benefit ${idx + 1}`}
+                                      />
+                                      <button
+                                        type="button"
+                                        className="bg-red-500 text-white px-2 rounded"
+                                        onClick={() => {
+                                          const newArr = arr.filter(
+                                            (_, i) => i !== idx
+                                          );
+                                          setForm({
+                                            ...form,
+                                            [item.id]: {
+                                              ...form[item.id],
+                                              value: newArr,
+                                            },
+                                          });
+                                        }}
+                                        disabled={arr.length === 1}
+                                      >
+                                        Hapus
+                                      </button>
+                                    </div>
+                                  )
+                                )}
+                                <button
+                                  type="button"
+                                  className="bg-green-500 text-white px-3 py-1 rounded"
+                                  onClick={() => {
+                                    const arr = form[item.id]?.value
+                                      ? Array.isArray(form[item.id].value)
+                                        ? form[item.id].value
+                                        : JSON.parse(
+                                            form[item.id].value || "[]"
+                                          )
+                                      : [""];
+                                    setForm({
+                                      ...form,
+                                      [item.id]: {
+                                        ...form[item.id],
+                                        value: [...arr, ""],
+                                      },
+                                    });
+                                  }}
+                                >
+                                  + Tambah Benefit
+                                </button>
+                              </>
+                            ) : (
+                              <ReactQuill
+                                value={form[item.id]?.value ?? ""}
+                                onChange={(val) =>
+                                  setForm({
+                                    ...form,
+                                    [item.id]: {
+                                      ...form[item.id],
+                                      value: val,
+                                    },
+                                  })
+                                }
+                                theme="snow"
+                                className="bg-white"
+                                modules={{
+                                  toolbar: [
+                                    [
+                                      { header: "1" },
+                                      { header: "2" },
+                                      { font: [] },
+                                    ],
+                                    [{ size: [] }],
+                                    [
+                                      "bold",
+                                      "italic",
+                                      "underline",
+                                      "strike",
+                                      "blockquote",
+                                    ],
+                                    [
+                                      { list: "ordered" },
+                                      { list: "bullet" },
+                                      { indent: "-1" },
+                                      { indent: "+1" },
+                                    ],
+                                    ["link", "image", "video"],
+                                    ["clean"],
+                                  ],
+                                }}
+                                formats={[
+                                  "header",
+                                  "font",
+                                  "size",
+                                  "bold",
+                                  "italic",
+                                  "underline",
+                                  "strike",
+                                  "blockquote",
+                                  "list",
+                                  "indent",
+                                  "link",
+                                  "image",
+                                  "video",
+                                ]}
+                              />
+                            )
+                          ) : item.type === "image" ? (
+                            item.value ? (
+                              <img
+                                src={BASE_IMAGE_URL + item.value}
+                                alt={item.key_name}
+                                className="max-h-20 object-contain border"
+                              />
+                            ) : (
+                              <span className="italic text-gray-400">
+                                Belum ada gambar
+                              </span>
+                            )
+                          ) : (
+                            <div
+                              className="prose"
+                              dangerouslySetInnerHTML={{ __html: item.value }}
+                            />
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          {editingId === item.id ? (
+                            <>
+                              <button
+                                className="bg-blue-600 text-white px-4 py-1 rounded"
+                                onClick={() => handleSave(item)}
+                                type="button"
+                              >
+                                Simpan
+                              </button>
+                              <button
+                                className="bg-gray-200 text-gray-700 px-4 py-1 rounded"
+                                onClick={() => setEditingId(null)}
+                                type="button"
+                              >
+                                Batal
+                              </button>
                             </>
                           ) : (
-                            <ReactQuill
-                              value={form[item.id]?.value ?? ""}
-                              onChange={(val) =>
-                                setForm({
-                                  ...form,
-                                  [item.id]: {
-                                    ...form[item.id],
-                                    value: val,
-                                  },
-                                })
-                              }
-                              theme="snow"
-                              className="bg-white"
-                              modules={{
-                                toolbar: [
-                                  [
-                                    { header: "1" },
-                                    { header: "2" },
-                                    { font: [] },
-                                  ],
-                                  [{ size: [] }],
-                                  [
-                                    "bold",
-                                    "italic",
-                                    "underline",
-                                    "strike",
-                                    "blockquote",
-                                  ],
-                                  [
-                                    { list: "ordered" },
-                                    { list: "bullet" },
-                                    { indent: "-1" },
-                                    { indent: "+1" },
-                                  ],
-                                  ["link", "image", "video"],
-                                  ["clean"],
-                                ],
-                              }}
-                              formats={[
-                                "header",
-                                "font",
-                                "size",
-                                "bold",
-                                "italic",
-                                "underline",
-                                "strike",
-                                "blockquote",
-                                "list",
-                                "indent",
-                                "link",
-                                "image",
-                                "video",
-                              ]}
-                            />
-                          )
-                        ) : item.type === "image" ? (
-                          item.value ? (
-                            <img
-                              src={BASE_IMAGE_URL + item.value}
-                              alt={item.key_name}
-                              className="max-h-20 object-contain border"
-                            />
-                          ) : (
-                            <span className="italic text-gray-400">
-                              Belum ada gambar
-                            </span>
-                          )
-                        ) : (
-                          <div
-                            className="prose"
-                            dangerouslySetInnerHTML={{ __html: item.value }}
-                          />
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        {editingId === item.id ? (
-                          <>
                             <button
-                              className="bg-blue-600 text-white px-4 py-1 rounded"
-                              onClick={() => handleSave(item)}
+                              className="bg-yellow-400 text-white px-4 py-1 rounded"
+                              onClick={() => handleEdit(item)}
                               type="button"
                             >
-                              Simpan
+                              Edit
                             </button>
-                            <button
-                              className="bg-gray-200 text-gray-700 px-4 py-1 rounded"
-                              onClick={() => setEditingId(null)}
-                              type="button"
-                            >
-                              Batal
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            className="bg-yellow-400 text-white px-4 py-1 rounded"
-                            onClick={() => handleEdit(item)}
-                            type="button"
-                          >
-                            Edit
-                          </button>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
           {success && <div className="text-green-600 mt-4">{success}</div>}
           {error && <div className="text-red-600 mt-4">{error}</div>}
         </div>

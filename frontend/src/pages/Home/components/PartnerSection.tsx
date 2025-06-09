@@ -1,36 +1,13 @@
+import { usePublic } from "@/contexts/PublicContext";
+
+const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
+
 const PartnerSection = () => {
-  const partners = [
-    {
-      id: 1,
-      logo: "https://via.placeholder.com/150x80?text=Partner+1",
-      alt: "Partner 1",
-    },
-    {
-      id: 2,
-      logo: "https://via.placeholder.com/150x80?text=Partner+2",
-      alt: "Partner 2",
-    },
-    {
-      id: 3,
-      logo: "https://via.placeholder.com/150x80?text=Partner+3",
-      alt: "Partner 3",
-    },
-    {
-      id: 4,
-      logo: "https://via.placeholder.com/150x80?text=Partner+4",
-      alt: "Partner 4",
-    },
-    {
-      id: 5,
-      logo: "https://via.placeholder.com/150x80?text=Partner+5",
-      alt: "Partner 5",
-    },
-    {
-      id: 6,
-      logo: "https://via.placeholder.com/150x80?text=Partner+6",
-      alt: "Partner 6",
-    },
-  ];
+  const { landingContent, loading } = usePublic();
+
+  const partners = landingContent
+    .filter((item) => item.section === "partner" && item.type === "image")
+    .sort((a, b) => a.sort_order - b.sort_order);
 
   const backgroundImage = "url(/assets/bg-partner.jpg)";
 
@@ -66,16 +43,22 @@ const PartnerSection = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center justify-center h-32"
+              className="bg-transparent flex justify-center items-center p-4 transition-transform transform hover:scale-105"
+              style={{ minHeight: "80px" }}
             >
               <img
-                src={partner.logo}
-                alt={partner.alt}
-                className="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                src={BASE_IMAGE_URL + partner.value}
+                alt={partner.key_name || "Partner"}
+                className="max-h-16 w-auto object-contain transition-opacity"
                 loading="lazy"
               />
             </div>
           ))}
+          {!loading && partners.length === 0 && (
+            <div className="col-span-full text-center text-white/70">
+              Belum ada data partner.
+            </div>
+          )}
         </div>
       </div>
     </section>

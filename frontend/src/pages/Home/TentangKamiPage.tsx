@@ -5,7 +5,6 @@ const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
 
 const TentangKamiPage = () => {
   const { about, loading } = useAbout();
-  console.log(about);
 
   return (
     <div className="bg-white">
