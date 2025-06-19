@@ -17,7 +17,6 @@ const Layanan = () => {
     (item) => item.key_name === "title_layanan"
   )?.value;
 
-  // Ambil semua nomor layanan yang ada (misal: 1,2,3)
   const layananNumbers = Array.from(
     new Set(
       layananContent

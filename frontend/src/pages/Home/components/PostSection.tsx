@@ -35,7 +35,7 @@ const PostSection = () => {
                   <img
                     src={
                       article.post_image
-                        ? `http://localhost:8000/api/storage/${article.post_image}`
+                        ? `https://dev4-p3.palindo.id/api/storage/${article.post_image}`
                         : "./assets/placeholder.jpg"
                     }
                     alt={article.post_title}

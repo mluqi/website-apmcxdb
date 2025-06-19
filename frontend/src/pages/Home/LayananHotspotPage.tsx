@@ -2,10 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useLayanan } from "@/contexts/LayananContext";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+const customIcon = L.icon({
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.0/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.0/images/marker-shadow.png",
+});
 import { useLocationHotspot } from "@/contexts/LocationHotspotContext";
 
-const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
+const BASE_IMAGE_URL = "https://dev4-p3.palindo.id/api/storage/";
 
 const LayananHotspotPage: React.FC = () => {
   const { layanan, loading } = useLayanan();
@@ -93,7 +101,11 @@ const LayananHotspotPage: React.FC = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {locations.map((loc) => (
-            <Marker key={loc.id} position={[loc.lat, loc.long]}>
+            <Marker
+              key={loc.id}
+              position={[loc.lat, loc.long]}
+              icon={customIcon}
+            >
               <Popup>
                 <div>
                   <div className="font-semibold">{loc.nama}</div>

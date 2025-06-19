@@ -1,7 +1,21 @@
 import React, { useState } from "react";
 import { useLocationHotspot } from "@/contexts/LocationHotspotContext";
-import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  Popup,
+} from "react-leaflet";
+// import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+const customIcon = L.icon({
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.0/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.0/images/marker-shadow.png",
+});
 
 interface FormState {
   nama: string;
@@ -176,7 +190,11 @@ const LocationHotspotPage: React.FC = () => {
               />
               {/* Marker preview semua lokasi hotspot yang sudah ada */}
               {locations.map((loc) => (
-                <Marker key={loc.id} position={[loc.lat, loc.long]}>
+                <Marker
+                  key={loc.id}
+                  position={[loc.lat, loc.long]}
+                  icon={customIcon}
+                >
                   <Popup>
                     <div>
                       <div className="font-semibold">{loc.nama}</div>

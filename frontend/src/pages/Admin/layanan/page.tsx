@@ -4,7 +4,7 @@ import type { Layanan } from "../../../contexts/LayananContext";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
-const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
+const BASE_IMAGE_URL = "https://dev4-p3.palindo.id/api/storage/";
 
 type FormState = {
   id: number;

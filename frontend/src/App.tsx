@@ -8,6 +8,7 @@ import BlogsPage from "./pages/Home/Blogs/BlogsPage";
 import BlogDetail from "./pages/Home/Blogs/BlogDetail";
 import KontakKamiPage from "./pages/Home/KontakKamiPage";
 import NotFoundPage from "./pages/Home/NotFoundPage";
+import IsolirPage from "./pages/Home/Isolir/IsolirPage";
 
 //Context
 import { AuthProvider } from "./contexts/AuthContext";
@@ -117,6 +118,7 @@ function App() {
 
                       {/* 404 Page */}
                       <Route path="*" element={<NotFoundPage />} />
+                      <Route path="/isolir" element={<IsolirPage />} />
                     </Routes>
                   </LocationHotspotProvider>
                 </LayananProvider>

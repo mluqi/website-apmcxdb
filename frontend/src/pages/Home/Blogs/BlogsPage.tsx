@@ -41,7 +41,7 @@ const BlogsPage = () => {
                 <img
                   src={
                     article.post_image
-                      ? `http://127.0.0.1:8000/api/storage/${article.post_image}`
+                      ? `https://dev4-p3.palindo.id/api/storage/${article.post_image}`
                       : "./assets/placeholder.jpg"
                   }
                   alt={article.post_title}

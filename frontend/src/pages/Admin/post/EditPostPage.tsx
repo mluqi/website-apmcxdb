@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
-const baseUrl = "http://127.0.0.1:8000/api/storage/";
+const baseUrl = "https://dev4-p3.palindo.id/api/storage/";
 
 const EditPostPage = () => {
   const { id } = useParams<{ id: string }>();

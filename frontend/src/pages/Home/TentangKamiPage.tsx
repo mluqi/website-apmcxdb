@@ -1,7 +1,7 @@
 import { BuildingIcon } from "lucide-react";
 import { useAbout } from "../../contexts/AboutContext";
 
-const BASE_IMAGE_URL = "http://localhost:8000/api/storage/";
+const BASE_IMAGE_URL = "https://dev4-p3.palindo.id/api/storage/";
 
 const TentangKamiPage = () => {
   const { about, loading } = useAbout();
